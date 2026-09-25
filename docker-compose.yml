@@ -1,0 +1,61 @@
+services:
+  nginx:
+    image: nginx:1.30.5-alpine3.24-slim@sha256:32463212baf0e7d91aded2e9b843a4f2b9e017804b8c9d5bae7b51dcef64389c
+    container_name: nginx
+    cap_drop: ["ALL"]
+    cap_add: ["NET_BIND_SERVICE", "CHOWN", "SETGID", "SETUID"]
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "80:8080"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      backend: { condition: service_healthy }
+    networks:
+      - proxy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 128M
+        reservations:
+          cpus: "0.05"
+          memory: 64M
+  backend:
+    build:
+      context: .
+      dockerfile: packages/backend/Dockerfile
+    container_name: backend
+    user: "backend"
+    env_file:
+      - .env
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 2s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: ["ALL"]
+    read_only: true
+    networks:
+      - backend
+      - proxy
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+
+networks:
+  backend:
+    internal: true
+  proxy:
+    driver: bridge
