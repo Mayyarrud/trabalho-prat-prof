@@ -1,0 +1,23 @@
+packages:
+  - "packages/*"
+
+minimumReleaseAge: 10080
+minimumReleaseAgeIgnoreMissingTime: false
+
+trustPolicy: no-downgrade
+blockExoticSubdeps: true
+
+strictDepBuilds: true
+allowBuilds: { esbuild: true }
+
+verifyStoreIntegrity: true
+strictStorePkgContentCheck: true
+
+strictPeerDependencies: true
+autoInstallPeers: false
+
+engineStrict: true
+
+lockfile: true
+preferFrozenLockfile: true
+
