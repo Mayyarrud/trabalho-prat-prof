@@ -6,10 +6,7 @@
   >
 </p>
 
-
-# 🌊 VAI DAR ONDA
-
-## Apresentação do projeto + Guia do Usuário
+# Apresentação do projeto + Guia do Usuário
 
 ## 📌 Apresentação do projeto
 
