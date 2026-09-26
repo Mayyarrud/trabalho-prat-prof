@@ -1,3 +1,12 @@
+<p align="center">
+  <img
+    src="./assets/banner.png"
+    alt="Vai Dar Onda - Aplicação de previsão para surfistas"
+    width="100%"
+  >
+</p>
+
+
 # 🌊 VAI DAR ONDA
 
 ## Apresentação do projeto + Guia do Usuário
