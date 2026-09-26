@@ -1,6 +1,6 @@
 <p align="center">
   <img
-    src="assets/banner.png"
+    src="./assets/banner.png"
     alt="Vai Dar Onda - Aplicação de previsão para surfistas"
     width="100%"
   >
