@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 
+import VaiDarOndaIcon from "@/assets/VaiDarOndaIcon.svg";
 import { mockBeaches } from "@/data/mockBeaches";
 
 type BeachPageProps = {
@@ -40,27 +41,31 @@ export default function BeachPage({ beachId }: BeachPageProps) {
     <main className="min-h-screen bg-[#F5F0DD] text-[#222A31]">
       <div className="mx-auto w-full max-w-[520px] px-6 pb-10">
         {/* Header */}
-        <header className="flex items-center justify-between py-6">
+        <header className="relative flex items-center justify-between py-6">
           <Link
             to="/"
-            className="flex h-8 w-8 items-center justify-start text-sm text-[#6B665C]"
+            className="absolute left-0 flex h-8 w-8 items-center justify-start text-sm text-[#6B665C]"
             aria-label="Voltar"
           >
             ‹
           </Link>
 
-          <div className="text-center">
-            <h1 className="text-sm font-semibold">{beach.name}</h1>
+          <div className="flex flex-1 items-center justify-center gap-3">
+            <img
+              src={VaiDarOndaIcon}
+              alt="Vai Dar Onda"
+              className="h-12 w-12 object-contain"
+            />
 
-            <p className="mt-1 text-xs text-[#6B665C]">
-              {beach.city} · {beach.state}
-            </p>
+            <span className="text-[26px] font-bold leading-none tracking-[-0.035em] text-[#222A31]">
+              Vai Dar Onda
+            </span>
           </div>
 
           <button
             type="button"
             aria-label="Abrir menu"
-            className="flex h-8 w-8 items-center justify-end text-sm text-[#6B665C]"
+            className="absolute right-0 flex h-8 w-8 items-center justify-end text-sm text-[#6B665C]"
           >
             ≡
           </button>
