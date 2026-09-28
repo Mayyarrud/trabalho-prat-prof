@@ -1,27 +1,41 @@
 import { Link } from "@tanstack/react-router";
 
+import { mockBeaches } from "@/data/mockBeaches";
+
 type BeachPageProps = {
   beachId?: string;
 };
 
-const beach = {
-  id: "1",
-  name: "Praia da Baleia",
-  city: "São Sebastião",
-  state: "SP",
-  description: "Ondas consistentes e condições favoráveis para surfar.",
-  waveHeight: "1,2 m",
-  wavePeriod: "12 s",
-  waveDirection: "NE",
-  windSpeed: "12 km/h",
-  windDirection: "NE",
-  temperature: "24°C",
-  weatherCondition: "Ensolarado",
-  surfability: "Alta",
-  beachCondition: "Aberto",
-};
-
 export default function BeachPage({ beachId }: BeachPageProps) {
+  const beach = mockBeaches.find((item) => item.id === beachId);
+
+  if (!beach) {
+    return (
+      <main className="min-h-screen bg-[#F5F0DD] text-[#222A31]">
+        <div className="mx-auto w-full max-w-[480px] px-6 py-10">
+          <Link to="/" className="text-sm text-[#6B665C]">
+            ← Voltar
+          </Link>
+
+          <div className="mt-10 rounded-2xl bg-[#FFFDF2] p-6 text-center">
+            <h1 className="text-lg font-semibold">Praia não encontrada</h1>
+
+            <p className="mt-2 text-sm text-[#6B665C]">
+              Não encontramos os dados dessa praia.
+            </p>
+
+            <Link
+              to="/"
+              className="mt-6 flex h-12 w-full items-center justify-center rounded-xl bg-[#222A31] text-sm font-medium text-white"
+            >
+              Voltar para início
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-[#F5F0DD] text-[#222A31]">
       <div className="mx-auto w-full max-w-[480px] px-6 pb-10">
@@ -128,14 +142,12 @@ export default function BeachPage({ beachId }: BeachPageProps) {
           <h2 className="text-sm font-medium">Condições principais</h2>
 
           <div className="mt-3 grid grid-cols-2 gap-3">
-            {/* Surfability */}
             <div className="rounded-xl bg-[#E9E2FF] p-3">
               <p className="text-xs text-[#6B665C]">Surfabilidade</p>
 
               <p className="mt-2 text-sm font-semibold">{beach.surfability}</p>
             </div>
 
-            {/* Beach condition */}
             <div className="rounded-xl bg-[#E5F7ED] p-3">
               <p className="text-xs text-[#6B665C]">Condição</p>
 
@@ -221,10 +233,8 @@ export default function BeachPage({ beachId }: BeachPageProps) {
           </Link>
         </section>
 
-        {/* Development note */}
         <p className="mt-6 text-center text-[11px] text-[#8B877E]">
           Dados demonstrativos para desenvolvimento do Front-end.
-          {beachId ? ` Praia: ${beachId}` : ""}
         </p>
       </div>
     </main>
