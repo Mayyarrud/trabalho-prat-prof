@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 
+import VaiDarOndaIcon from "@/assets/VaiDarOndaIcon.svg";
 import { mockBeaches, type Beach } from "@/data/mockBeaches";
 
 export default function HomePage() {
@@ -29,21 +30,22 @@ export default function HomePage() {
       <div className="mx-auto flex min-h-screen w-full max-w-[520px] flex-col px-6 pb-8">
         {/* Header */}
         <header className="flex items-center justify-between py-6">
-          <div className="flex items-center gap-2">
-            <span
-              className="flex h-4 w-4 items-center justify-center rounded-full border border-[#222A31]"
-              aria-hidden="true"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-[#4D63FF]" />
-            </span>
+          <div className="flex flex-1 items-center justify-center gap-3">
+            <img
+              src={VaiDarOndaIcon}
+              alt="Vai Dar Onda"
+              className="h-12 w-12 object-contain"
+            />
 
-            <span className="text-sm font-semibold">Vai Dar Onda</span>
+            <span className="text-[26px] font-bold leading-none tracking-[-0.035em] text-[#222A31]">
+              Vai Dar Onda
+            </span>
           </div>
 
           <button
             type="button"
             aria-label="Abrir menu"
-            className="text-xs text-[#6B665C]"
+            className="absolute right-6 text-sm text-[#6B665C]"
           >
             ≡
           </button>
@@ -214,6 +216,7 @@ export default function HomePage() {
             <div className="mt-4 grid grid-cols-3 gap-2">
               <div className="rounded-xl bg-[#EEF5FC] p-3">
                 <p className="text-[11px] text-[#6B665C]">Ondas</p>
+
                 <p className="mt-2 text-sm font-semibold">
                   {selectedBeach.waveHeight}
                 </p>
@@ -221,6 +224,7 @@ export default function HomePage() {
 
               <div className="rounded-xl bg-[#E5F7ED] p-3">
                 <p className="text-[11px] text-[#6B665C]">Vento</p>
+
                 <p className="mt-2 text-sm font-semibold">
                   {selectedBeach.windSpeed}
                 </p>
@@ -228,6 +232,7 @@ export default function HomePage() {
 
               <div className="rounded-xl bg-[#FFF3CF] p-3">
                 <p className="text-[11px] text-[#6B665C]">Temp.</p>
+
                 <p className="mt-2 text-sm font-semibold">
                   {selectedBeach.temperature}
                 </p>
