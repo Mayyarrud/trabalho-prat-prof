@@ -5,7 +5,8 @@
     "type": "module",
     "scripts": {
         "dev": "node --watch src/server.ts",
-        "start": "node src/server.ts"
+        "start": "node src/server.ts",
+        "populate-beaches-db": "node --env-file ../../.env src/db/populate_beaches.ts"
     },
     "dependencies": {
         "@fastify/cors": "^11.3.0",
