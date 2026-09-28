@@ -1,9 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/praia/$id')({
-  component: RouteComponent,
-})
+import BeachPage from "@/pages/beach";
 
-function RouteComponent() {
-  return <div>Hello "/praia/$id"!</div>
+export const Route = createFileRoute("/praia/$id")({
+  component: BeachRoute,
+});
+
+function BeachRoute() {
+  const { id } = Route.useParams();
+
+  return <BeachPage beachId={id} />;
 }
