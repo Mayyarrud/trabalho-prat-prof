@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 
 type Beach = {
@@ -318,12 +319,10 @@ export default function HomePage() {
         {/* Praia em destaque */}
         <section className="mt-6">
           <div className="overflow-hidden rounded-2xl bg-[#FFFDF2]">
-            {/* Imagem / visual da praia */}
+            {/* Visual da praia */}
             <div className="relative h-[148px] overflow-hidden bg-gradient-to-br from-[#7CC7E5] via-[#9ED1D4] to-[#D5BE82]">
-              {/* Sol */}
               <div className="absolute right-8 top-5 h-12 w-12 rounded-full bg-[#FFFDF2]/40" />
 
-              {/* Onda estilizada */}
               <svg
                 viewBox="0 0 480 180"
                 preserveAspectRatio="none"
@@ -403,12 +402,14 @@ export default function HomePage() {
                 </span>
               </div>
 
-              <button
-                type="button"
-                className="mt-4 h-12 w-full rounded-xl bg-[#222A31] text-sm font-medium text-white transition hover:opacity-90"
+              {/* Navegação para a página da praia */}
+              <Link
+                to="/praia/$id"
+                params={{ id: selectedBeach.id }}
+                className="mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-[#222A31] text-sm font-medium text-white transition hover:opacity-90"
               >
                 Ver previsão →
-              </button>
+              </Link>
             </div>
           </div>
         </section>
