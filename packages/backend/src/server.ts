@@ -1,4 +1,7 @@
 import { app } from "./app.ts";
+import { loadCache } from "./cache/data.ts";
+
+await loadCache();
 
 app.listen(
   {
