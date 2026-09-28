@@ -12,7 +12,7 @@ export default function BeachPage({ beachId }: BeachPageProps) {
   if (!beach) {
     return (
       <main className="min-h-screen bg-[#F5F0DD] text-[#222A31]">
-        <div className="mx-auto w-full max-w-[480px] px-6 py-10">
+        <div className="mx-auto w-full max-w-[480px] px-6 py-8">
           <Link to="/" className="text-sm text-[#6B665C]">
             ← Voltar
           </Link>
@@ -38,10 +38,14 @@ export default function BeachPage({ beachId }: BeachPageProps) {
 
   return (
     <main className="min-h-screen bg-[#F5F0DD] text-[#222A31]">
-      <div className="mx-auto w-full max-w-[480px] px-6 pb-10">
+      <div className="mx-auto w-full max-w-[520px] px-6 pb-10">
         {/* Header */}
         <header className="flex items-center justify-between py-6">
-          <Link to="/" className="text-sm text-[#6B665C]" aria-label="Voltar">
+          <Link
+            to="/"
+            className="flex h-8 w-8 items-center justify-start text-sm text-[#6B665C]"
+            aria-label="Voltar"
+          >
             ‹
           </Link>
 
@@ -56,21 +60,22 @@ export default function BeachPage({ beachId }: BeachPageProps) {
           <button
             type="button"
             aria-label="Abrir menu"
-            className="text-sm text-[#6B665C]"
+            className="flex h-8 w-8 items-center justify-end text-sm text-[#6B665C]"
           >
             ≡
           </button>
         </header>
 
-        {/* Beach visual */}
+        {/* Beach hero and summary */}
         <section className="overflow-hidden rounded-2xl bg-[#FFFDF2]">
+          {/* Hero */}
           <div className="relative h-[190px] overflow-hidden bg-gradient-to-br from-[#7CC7E5] via-[#9ED1D4] to-[#D5BE82]">
-            <div className="absolute right-8 top-6 h-14 w-14 rounded-full bg-[#FFFDF2]/40" />
+            <div className="absolute right-9 top-7 h-14 w-14 rounded-full bg-[#FFFDF2]/45" />
 
             <svg
               viewBox="0 0 480 180"
               preserveAspectRatio="none"
-              className="absolute bottom-0 left-0 h-[115px] w-full"
+              className="absolute bottom-0 left-0 h-[120px] w-full"
               aria-hidden="true"
             >
               <path
@@ -87,12 +92,13 @@ export default function BeachPage({ beachId }: BeachPageProps) {
             <button
               type="button"
               aria-label="Adicionar aos favoritos"
-              className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#FFFDF2]/90 text-lg text-[#6B665C]"
+              className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[#FFFDF2] text-lg text-[#6B665C] shadow-sm"
             >
               ♡
             </button>
           </div>
 
+          {/* Beach information */}
           <div className="p-4">
             <h2 className="text-base font-semibold">{beach.name}</h2>
 
@@ -100,12 +106,12 @@ export default function BeachPage({ beachId }: BeachPageProps) {
               {beach.city} · {beach.state}
             </p>
 
-            <p className="mt-3 text-sm leading-5 text-[#6B665C]">
+            <p className="mt-4 text-sm leading-5 text-[#6B665C]">
               {beach.description}
             </p>
 
-            {/* Tabs */}
-            <div className="mt-5 flex items-center gap-2">
+            {/* Period navigation */}
+            <div className="mt-5 flex items-center gap-1">
               <button
                 type="button"
                 className="rounded-full bg-[#CDB4FF] px-4 py-2 text-xs font-medium text-[#222A31]"
@@ -137,100 +143,109 @@ export default function BeachPage({ beachId }: BeachPageProps) {
           </div>
         </section>
 
-        {/* Main conditions */}
-        <section className="mt-5">
-          <h2 className="text-sm font-medium">Condições principais</h2>
+        {/* Forecast data */}
+        <section className="mt-5 rounded-2xl bg-[#FFFDF2] p-4">
+          {/* Main conditions */}
+          <div>
+            <h2 className="text-sm font-medium">Condições principais</h2>
 
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            <div className="rounded-xl bg-[#E9E2FF] p-3">
-              <p className="text-xs text-[#6B665C]">Surfabilidade</p>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <div className="rounded-xl bg-[#E9E2FF] p-3">
+                <p className="text-xs text-[#6B665C]">Surfabilidade</p>
 
-              <p className="mt-2 text-sm font-semibold">{beach.surfability}</p>
-            </div>
+                <p className="mt-2 text-sm font-semibold">
+                  {beach.surfability}
+                </p>
+              </div>
 
-            <div className="rounded-xl bg-[#E5F7ED] p-3">
-              <p className="text-xs text-[#6B665C]">Condição</p>
+              <div className="rounded-xl bg-[#E5F7ED] p-3">
+                <p className="text-xs text-[#6B665C]">Condição</p>
 
-              <p className="mt-2 text-sm font-semibold">
-                {beach.beachCondition}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Waves */}
-        <section className="mt-6">
-          <h2 className="text-sm font-medium">Ondas</h2>
-
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            <div className="rounded-xl bg-[#EEF5FC] p-3">
-              <p className="text-[11px] text-[#6B665C]">Altura</p>
-
-              <p className="mt-2 text-sm font-medium">{beach.waveHeight}</p>
-            </div>
-
-            <div className="rounded-xl bg-[#EEF5FC] p-3">
-              <p className="text-[11px] text-[#6B665C]">Período</p>
-
-              <p className="mt-2 text-sm font-medium">{beach.wavePeriod}</p>
-            </div>
-
-            <div className="rounded-xl bg-[#EEF5FC] p-3">
-              <p className="text-[11px] text-[#6B665C]">Direção</p>
-
-              <p className="mt-2 text-sm font-medium">{beach.waveDirection}</p>
+                <p className="mt-2 text-sm font-semibold">
+                  {beach.beachCondition}
+                </p>
+              </div>
             </div>
           </div>
-        </section>
 
-        {/* Wind */}
-        <section className="mt-6">
-          <h2 className="text-sm font-medium">Vento</h2>
+          {/* Waves */}
+          <div className="mt-6">
+            <h2 className="text-sm font-medium">Ondas</h2>
 
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            <div className="rounded-xl bg-[#E5F7ED] p-3">
-              <p className="text-[11px] text-[#6B665C]">Velocidade</p>
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              <div className="rounded-xl bg-[#EEF5FC] p-3">
+                <p className="text-[11px] text-[#6B665C]">Altura</p>
 
-              <p className="mt-2 text-sm font-medium">{beach.windSpeed}</p>
-            </div>
+                <p className="mt-2 text-sm font-medium">{beach.waveHeight}</p>
+              </div>
 
-            <div className="rounded-xl bg-[#E5F7ED] p-3">
-              <p className="text-[11px] text-[#6B665C]">Direção</p>
+              <div className="rounded-xl bg-[#EEF5FC] p-3">
+                <p className="text-[11px] text-[#6B665C]">Período</p>
 
-              <p className="mt-2 text-sm font-medium">{beach.windDirection}</p>
-            </div>
-          </div>
-        </section>
+                <p className="mt-2 text-sm font-medium">{beach.wavePeriod}</p>
+              </div>
 
-        {/* Climate */}
-        <section className="mt-6">
-          <h2 className="text-sm font-medium">Clima</h2>
+              <div className="rounded-xl bg-[#EEF5FC] p-3">
+                <p className="text-[11px] text-[#6B665C]">Direção</p>
 
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            <div className="rounded-xl bg-[#FFF3CF] p-3">
-              <p className="text-[11px] text-[#6B665C]">Temperatura</p>
-
-              <p className="mt-2 text-sm font-medium">{beach.temperature}</p>
-            </div>
-
-            <div className="rounded-xl bg-[#FFF3CF] p-3">
-              <p className="text-[11px] text-[#6B665C]">Condição</p>
-
-              <p className="mt-2 text-sm font-medium">
-                {beach.weatherCondition}
-              </p>
+                <p className="mt-2 text-sm font-medium">
+                  {beach.waveDirection}
+                </p>
+              </div>
             </div>
           </div>
-        </section>
 
-        {/* Detailed forecast */}
-        <section className="mt-6">
-          <Link
-            to="/"
-            className="flex h-12 w-full items-center justify-center rounded-xl bg-[#222A31] text-sm font-medium text-white transition hover:opacity-90"
-          >
-            Retornar para início
-          </Link>
+          {/* Wind */}
+          <div className="mt-6">
+            <h2 className="text-sm font-medium">Vento</h2>
+
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <div className="rounded-xl bg-[#E5F7ED] p-3">
+                <p className="text-[11px] text-[#6B665C]">Velocidade</p>
+
+                <p className="mt-2 text-sm font-medium">{beach.windSpeed}</p>
+              </div>
+
+              <div className="rounded-xl bg-[#E5F7ED] p-3">
+                <p className="text-[11px] text-[#6B665C]">Direção</p>
+
+                <p className="mt-2 text-sm font-medium">
+                  {beach.windDirection}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Weather */}
+          <div className="mt-6">
+            <h2 className="text-sm font-medium">Clima</h2>
+
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <div className="rounded-xl bg-[#FFF3CF] p-3">
+                <p className="text-[11px] text-[#6B665C]">Temperatura</p>
+
+                <p className="mt-2 text-sm font-medium">{beach.temperature}</p>
+              </div>
+
+              <div className="rounded-xl bg-[#FFF3CF] p-3">
+                <p className="text-[11px] text-[#6B665C]">Condição</p>
+
+                <p className="mt-2 text-sm font-medium">
+                  {beach.weatherCondition}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Return */}
+          <div className="mt-6">
+            <Link
+              to="/"
+              className="flex h-12 w-full items-center justify-center rounded-xl bg-[#222A31] text-sm font-medium text-white transition hover:opacity-90"
+            >
+              Retornar para início
+            </Link>
+          </div>
         </section>
 
         <p className="mt-6 text-center text-[11px] text-[#8B877E]">
