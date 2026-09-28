@@ -6,7 +6,8 @@
     "scripts": {
         "dev": "node --watch src/server.ts",
         "start": "node src/server.ts",
-        "populate-beaches-db": "node --env-file ../../.env src/db/populate_beaches.ts"
+        "populate-beaches-db": "node --env-file ../../.env src/db/populate_beaches.ts",
+        "populate-forecast-db": "node --env-file ../../.env src/db/populate_forecast.ts"
     },
     "dependencies": {
         "@fastify/cors": "^11.3.0",
