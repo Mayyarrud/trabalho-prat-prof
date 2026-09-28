@@ -229,7 +229,7 @@ export default function BeachPage({ beachId }: BeachPageProps) {
             to="/"
             className="flex h-12 w-full items-center justify-center rounded-xl bg-[#222A31] text-sm font-medium text-white transition hover:opacity-90"
           >
-            Ver previsão completa →
+            Retornar para início
           </Link>
         </section>
 
