@@ -5,7 +5,7 @@ import plugins from "./plugins/index.ts";
 export const app = fastify({
   logger: { level: "warn" },
   bodyLimit: 1024 * 20,
-  routerOptions: { maxParamLength: 32 }
+  routerOptions: { maxParamLength: 100 }
 });
 
 app.register(plugins);
