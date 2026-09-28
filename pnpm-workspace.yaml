@@ -5,6 +5,8 @@ minimumReleaseAge: 10080
 minimumReleaseAgeIgnoreMissingTime: false
 
 trustPolicy: no-downgrade
+trustPolicyExclude:
+  - "semver@6.3.1"
 blockExoticSubdeps: true
 
 strictDepBuilds: true
