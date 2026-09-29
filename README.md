@@ -362,8 +362,9 @@ Praias favoritas
 Selecionar uma praia
   ↓
 Visualizar condições
+```
 
-📝 Atualizações do Guia
+# 📝 Atualizações do Guia
 Esta documentação será atualizada conforme as funcionalidades forem implementadas, testadas e disponibilizadas na aplicação.
 
 Funcionalidades ainda não implementadas permanecerão identificadas como “Em desenvolvimento” até que possam ser documentadas com o passo a passo definitivo.
