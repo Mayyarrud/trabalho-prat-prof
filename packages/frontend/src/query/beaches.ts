@@ -5,13 +5,13 @@ import { getBeach, searchBeaches } from "@/api/beaches";
 export function searchBeachesQueryOptions(search?: string) {
   return queryOptions({
     queryKey: ["beaches", { search }],
-    queryFn: () => searchBeaches(search),
+    queryFn: ({ signal }) => searchBeaches(search, signal),
   });
 }
 
 export function beachQueryOptions(id: string) {
   return queryOptions({
     queryKey: ["beaches", id],
-    queryFn: () => getBeach(id),
+    queryFn: ({ signal }) => getBeach(id, signal),
   });
 }
