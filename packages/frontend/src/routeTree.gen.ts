@@ -10,43 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PraiaIdRouteImport } from './routes/praia.$id'
+import { Route as BeachIdRouteImport } from './routes/beach.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PraiaIdRoute = PraiaIdRouteImport.update({
-  id: '/praia/$id',
-  path: '/praia/$id',
+const BeachIdRoute = BeachIdRouteImport.update({
+  id: '/beach/$id',
+  path: '/beach/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/praia/$id': typeof PraiaIdRoute
+  '/beach/$id': typeof BeachIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/praia/$id': typeof PraiaIdRoute
+  '/beach/$id': typeof BeachIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/praia/$id': typeof PraiaIdRoute
+  '/beach/$id': typeof BeachIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/praia/$id'
+  fullPaths: '/' | '/beach/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/praia/$id'
-  id: '__root__' | '/' | '/praia/$id'
+  to: '/' | '/beach/$id'
+  id: '__root__' | '/' | '/beach/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  PraiaIdRoute: typeof PraiaIdRoute
+  BeachIdRoute: typeof BeachIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,11 +58,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/praia/$id': {
-      id: '/praia/$id'
-      path: '/praia/$id'
-      fullPath: '/praia/$id'
-      preLoaderRoute: typeof PraiaIdRouteImport
+    '/beach/$id': {
+      id: '/beach/$id'
+      path: '/beach/$id'
+      fullPath: '/beach/$id'
+      preLoaderRoute: typeof BeachIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -70,7 +70,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PraiaIdRoute: PraiaIdRoute,
+  BeachIdRoute: BeachIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
