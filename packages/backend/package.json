@@ -6,6 +6,7 @@
     "scripts": {
         "dev": "node --watch src/server.ts",
         "start": "node src/server.ts",
+        "test": "node --test tests/*.test.ts",
         "populate-beaches-db": "node --env-file ../../.env src/db/populate_beaches.ts",
         "populate-forecast-db": "node --env-file ../../.env src/db/populate_forecast.ts"
     },
