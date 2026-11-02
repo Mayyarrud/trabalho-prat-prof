@@ -363,7 +363,39 @@ Selecionar uma praia
   ↓
 Visualizar condições
 ```
+---
 
+## 🛠️ Como executar o projeto localmente
+
+Para que outro desenvolvedor consiga rodar a aplicação em seu computador pessoal, siga os passos abaixo:
+
+### Pré-requisitos
+- Ter o [Node.js](https://nodejs.org/) instalado na máquina.
+- Ter o [Git](https://git-scm.com/) instalado.
+
+### Passo a passo para execução
+
+1. **Clonar o repositório:**
+   Abra o terminal e baixe o projeto executando o comando:
+   `git clone https://github.com/Mayyarrud/trabalho-prat-prof.git`
+
+2. **Acessar a pasta do projeto:**
+   Navegue até o diretório do projeto:
+   `cd trabalho-prat-prof`
+
+3. **Instalar as dependências:**
+   Execute o comando abaixo para instalar todas as bibliotecas necessárias do projeto:
+   `npm install`
+
+4. **Rodar a aplicação:**
+   Inicie o servidor de desenvolvimento com o comando:
+   `npm run dev`
+
+5. **Acessar no navegador:**
+   O terminal exibirá um link local (geralmente `http://localhost:5173` ou `http://localhost:3000`). Basta clicar nele ou colar no navegador para ver o sistema funcionando!
+
+---
+   
 # 📝 Atualizações do Guia
 Esta documentação será atualizada conforme as funcionalidades forem implementadas, testadas e disponibilizadas na aplicação.
 
