@@ -1,5 +1,6 @@
 import { app } from "./app.ts";
 import { loadCache } from "./cache/data.ts";
+import { startScheduler } from "./jobs/scheduler.ts";
 
 await loadCache();
 
@@ -16,3 +17,5 @@ app.listen(
     app.log.info(`Server running at ${address}`);
   }
 );
+
+startScheduler();

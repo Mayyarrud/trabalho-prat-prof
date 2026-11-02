@@ -1,7 +1,6 @@
 export interface Surfability {
   score: number;
   classification: "Favorável" | "Regular" | "Desfavorável";
-  simulated: boolean;
 }
 
 export interface Forecast {
