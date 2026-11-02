@@ -1,5 +1,6 @@
 import {
   doublePrecision,
+  foreignKey,
   index,
   integer,
   pgTable,
@@ -12,40 +13,51 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import type { AnyPgColumn } from "drizzle-orm/pg-core";
+import { authUsers } from "drizzle-orm/supabase";
 
-export const users = pgTable("user", {
-  id: uuid("id").defaultRandom().primaryKey(),
+export const users = pgTable(
+  "user", 
+  {
+    id: uuid("id").primaryKey().notNull(),
 
-  role: text("role").notNull(),
-  name: text("name").notNull(),
+    role: text("role").notNull(),
+    name: text("name").notNull(),
 
-  surfLevel: text("surf_level"),
+    surfLevel: text("surf_level"),
 
-  idFavouriteBeach: uuid("id_favourite_beach").references(
-    (): AnyPgColumn => beaches.id,
-    {
-      onDelete: "set null",
-      onUpdate: "cascade",
-    },
-  ),
+    idFavouriteBeach: uuid("id_favourite_beach").references(
+      (): AnyPgColumn => beaches.id,
+      {
+        onDelete: "set null",
+        onUpdate: "cascade",
+      },
+    ),
 
-  createdAt: timestamp("created_at", {
-    withTimezone: true,
-  })
-    .defaultNow()
-    .notNull(),
+    createdAt: timestamp("created_at", {
+      withTimezone: true,
+    })
+      .defaultNow()
+      .notNull(),
 
-  updatedAt: timestamp("updated_at", {
-    withTimezone: true,
-  })
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
+    updatedAt: timestamp("updated_at", {
+      withTimezone: true,
+    })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
 
-  deletedAt: timestamp("deleted_at", {
-    withTimezone: true,
-  }),
-});
+    deletedAt: timestamp("deleted_at", {
+      withTimezone: true,
+    }),
+  },  
+  (table) => [
+      foreignKey({
+        columns: [table.id],
+        foreignColumns: [authUsers.id],
+        name: "user_auth_id_fk",
+      }).onDelete("cascade"),
+    ],
+);
 
 export const beaches = pgTable(
   "beach",
