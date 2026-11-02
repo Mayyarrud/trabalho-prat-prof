@@ -1,8 +1,29 @@
-import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 import VaiDarOndaIcon from "@/public/VaiDarOndaIcon.svg";
+import { useAuth } from "@/auth/AuthProvider";
+import { logout } from "@/auth/auth-service";
+import { notifyError } from "@/lib/notify-error";
 
 export default function Header({ showBack = true }: { showBack?: boolean }) {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
+  async function handleLogout() {
+    setIsSigningOut(true);
+    try {
+      const { error } = await logout();
+      if (error) throw error;
+      await navigate({ to: "/", replace: true });
+    } catch {
+      notifyError("Não foi possível sair. Tente novamente.");
+    } finally {
+      setIsSigningOut(false);
+    }
+  }
+
   return (
     <header className="grid grid-cols-[2.25rem_1fr_2.25rem] items-center py-6">
       {showBack && (
@@ -38,6 +59,22 @@ export default function Header({ showBack = true }: { showBack?: boolean }) {
           Vai Dar Onda
         </span>
       </div>
+      <nav aria-label="Conta" className="col-span-3 mt-4 flex flex-wrap items-center justify-end gap-4 text-xs text-[#6B665C]">
+        {user ? (
+          <>
+            <span className="mr-auto max-w-[180px] truncate" title={user.email}>{user.email}</span>
+            <Link to="/update-password" className="underline underline-offset-4">Alterar senha</Link>
+            <button type="button" onClick={handleLogout} disabled={isSigningOut} className="underline underline-offset-4 disabled:opacity-50">
+              {isSigningOut ? "Saindo..." : "Sair"}
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" search={{ next: "/" }} className="underline underline-offset-4">Entrar</Link>
+            <Link to="/sign-up" search={{ next: "/" }} className="underline underline-offset-4">Criar conta</Link>
+          </>
+        )}
+      </nav>
     </header>
   );
 }
