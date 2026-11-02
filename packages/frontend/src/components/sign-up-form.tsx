@@ -17,12 +17,13 @@ import {
 } from '@/components/card'
 import { Input } from '@/components/input'
 import { Label } from '@/components/label'
+import { isSurfLevel, surfLevels, SurfLevel } from '@/enums/surf-level'
 
 export function SignUpForm({ next = '/', className, ...props }: React.ComponentPropsWithoutRef<'div'> & { next?: string }) {
   const navigate = useNavigate()
   const captcha = useAuthCaptcha()
   const [name, setName] = useState('')
-  const [surfLevel, setSurfLevel] = useState('Iniciante')
+  const [surfLevel, setSurfLevel] = useState<SurfLevel>(SurfLevel.Iniciante)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
@@ -91,10 +92,10 @@ export function SignUpForm({ next = '/', className, ...props }: React.ComponentP
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="surf-level">Nível de surf</Label>
-                  <select id="surf-level" value={surfLevel} onChange={(e) => setSurfLevel(e.target.value)} className="h-10 rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
-                    <option>Iniciante</option>
-                    <option>Intermediário</option>
-                    <option>Avançado</option>
+                  <select id="surf-level" value={surfLevel} onChange={(e) => {
+                    if (isSurfLevel(e.target.value)) setSurfLevel(e.target.value)
+                  }} className="h-10 rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+                    {surfLevels.map((surfLevel) => <option key={surfLevel}>{surfLevel}</option>)}
                   </select>
                 </div>
                 <div className="grid gap-2">

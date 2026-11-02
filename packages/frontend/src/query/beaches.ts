@@ -1,6 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 
 import { getBeach, searchBeaches } from "@/api/beaches";
+import type { SurfLevel } from "@/enums/surf-level";
 
 export function searchBeachesQueryOptions(search?: string) {
   return queryOptions({
@@ -9,9 +10,10 @@ export function searchBeachesQueryOptions(search?: string) {
   });
 }
 
-export function beachQueryOptions(id: string) {
+export function beachQueryOptions(id: string, surfLevel?: SurfLevel | null) {
   return queryOptions({
-    queryKey: ["beaches", id],
-    queryFn: ({ signal }) => getBeach(id, signal),
+    queryKey: ["beaches", id, { surfLevel: surfLevel ?? null }],
+    queryFn: ({ signal }) => getBeach(id, signal, surfLevel),
+    placeholderData: (previous, query) => query?.queryKey[1] === id ? previous : undefined,
   });
 }

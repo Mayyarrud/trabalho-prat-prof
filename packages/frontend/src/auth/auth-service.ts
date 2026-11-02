@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { authRedirectUrl } from "./auth-redirect";
+import type { SurfLevel } from "@/enums/surf-level";
 
 export function login(email: string, password: string, captchaToken: string) {
   return supabase.auth.signInWithPassword({
@@ -13,7 +14,7 @@ export function register(
   name: string,
   email: string,
   password: string,
-  surfLevel: string,
+  surfLevel: SurfLevel,
   captchaToken: string,
   next = "/",
 ) {

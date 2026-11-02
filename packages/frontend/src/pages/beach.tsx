@@ -7,10 +7,13 @@ import Error from "@/components/Error";
 import Header from "@/components/Header";
 import Loading from "@/components/Loading";
 import { beachQueryOptions } from "@/query/beaches";
+import { useMe } from "@/query/me";
 
 export default function BeachPage() {
   const { id } = useParams({ from: "/beach/$id" });
-  const { data: beach, isPending, error } = useQuery(beachQueryOptions(id));
+  const profile = useMe();
+  const surfLevel = profile.data?.surfLevel;
+  const { data: beach, isPending, isPlaceholderData, error } = useQuery(beachQueryOptions(id, surfLevel));
 
   if (isPending) return <Loading />;
 
@@ -28,7 +31,7 @@ export default function BeachPage() {
       <div className="mx-auto w-full max-w-[520px] px-6 pb-10">
         <Header />
         <BeachSummary beach={beach} />
-        <BeachForecast key={beach.id} forecasts={beach.forecast} />
+        <BeachForecast key={beach.id} forecasts={beach.forecast} surfLevel={surfLevel} isUpdating={isPlaceholderData} />
 
         <Link
           to="/"

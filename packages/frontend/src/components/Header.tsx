@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 
 import VaiDarOndaIcon from "@/public/VaiDarOndaIcon.svg";
 import { useAuth } from "@/auth/AuthProvider";
@@ -9,6 +9,8 @@ import { notifyError } from "@/lib/notify-error";
 export default function Header({ showBack = true }: { showBack?: boolean }) {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const next = location.pathname === "/login" || location.pathname === "/sign-up" ? "/" : location.href;
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   async function handleLogout() {
@@ -63,15 +65,15 @@ export default function Header({ showBack = true }: { showBack?: boolean }) {
         {user ? (
           <>
             <span className="mr-auto max-w-[180px] truncate" title={user.email}>{user.email}</span>
-            <Link to="/update-password" className="underline underline-offset-4">Alterar senha</Link>
+            <Link to="/profile" className="underline underline-offset-4">Meu perfil</Link>
             <button type="button" onClick={handleLogout} disabled={isSigningOut} className="underline underline-offset-4 disabled:opacity-50">
               {isSigningOut ? "Saindo..." : "Sair"}
             </button>
           </>
         ) : (
           <>
-            <Link to="/login" search={{ next: "/" }} className="underline underline-offset-4">Entrar</Link>
-            <Link to="/sign-up" search={{ next: "/" }} className="underline underline-offset-4">Criar conta</Link>
+            <Link to="/login" search={{ next }} className="underline underline-offset-4">Entrar</Link>
+            <Link to="/sign-up" search={{ next }} className="underline underline-offset-4">Criar conta</Link>
           </>
         )}
       </nav>
