@@ -38,13 +38,18 @@ jobs:
         shell: bash
         env:
           VITE_API_URL: ${{ vars.VITE_API_URL }}
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_TURNSTILE_SITE_KEY: ${{ vars.VITE_TURNSTILE_SITE_KEY }}
         run: |
           set -euo pipefail
 
-          if [ -z "${VITE_API_URL:-}" ]; then
-            echo "::error::VITE_API_URL is not configured."
-            exit 1
-          fi
+          for build_variable in VITE_API_URL VITE_SUPABASE_URL VITE_SUPABASE_PUBLISHABLE_KEY VITE_TURNSTILE_SITE_KEY; do
+            if [ -z "${!build_variable:-}" ]; then
+              echo "::error::$build_variable is not configured."
+              exit 1
+            fi
+          done
 
           pnpm --filter @vai-dar-onda/frontend run build --base=./
 
