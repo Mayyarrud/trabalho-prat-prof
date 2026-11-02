@@ -1,48 +1,32 @@
 import type { FastifyInstance } from "fastify";
 import validator from "validator";
+import { surfLevels, type SurfLevel } from "../enums/surf-level.ts";
+import { getBeach, searchBeaches } from "../services/beaches.ts";
 
-import {
-  beachesCache,
-  forecastsCache,
-} from "../cache/data.ts";
+export default async function beachRoutes(fastify: FastifyInstance) {
+  fastify.get<{ Querystring: { search?: unknown } }>("/", async (request, reply) => {
+    const { search } = request.query;
 
-import normalizeString from "../utils/normalize-string.ts";
-
-export default async function beachRoutes(
-  fastify: FastifyInstance,
-) {
-  fastify.get("/", async (request, reply) => {
-    const { search } = request.query as {
-      search?: unknown;
-    };
-
-    if (search === undefined) {
-        return beachesCache;
+    if (search !== undefined && (typeof search !== "string" || search.length > 80)) {
+      return reply.status(400).send({ message: "Busca inválida" });
     }
 
-    if (typeof search !== "string") {
-        return reply.status(400).send({
-            message: "Busca inválida",
-        });
-    }
-
-    if (search.length > 80) {
-        return reply.status(400).send({
-            message: "Busca inválida",
-        });
-    }
-
-    const searchValue = normalizeString(search);
-
-    return beachesCache.filter((beach) =>
-        normalizeString(beach.name).includes(searchValue),
-    );
+    return searchBeaches(search);
   });
 
-  fastify.get("/:id", async (request, reply) => {
-    const { id } = request.params as {
-      id: string;
-    };
+  fastify.get<{
+    Params: { id: string };
+    Querystring: { surfLevel?: SurfLevel };
+  }>("/:id", {
+    schema: {
+      querystring: {
+        type: "object",
+        properties: { surfLevel: { type: "string", enum: surfLevels } },
+      },
+    },
+  }, async (request, reply) => {
+    const { surfLevel } = request.query;
+    const { id } = request.params;
 
     if (!validator.isUUID(id)) {
       return reply.status(400).send({
@@ -50,9 +34,7 @@ export default async function beachRoutes(
       });
     }
 
-    const beach = beachesCache.find(
-      (beach) => beach.id === id,
-    );
+    const beach = getBeach(id, surfLevel);
 
     if (!beach) {
       return reply.status(404).send({
@@ -60,17 +42,6 @@ export default async function beachRoutes(
       });
     }
 
-    const forecast = forecastsCache
-      .filter((forecast) => forecast.idBeach === id)
-      .sort(
-        (a, b) =>
-          a.forecastTime.getTime() -
-          b.forecastTime.getTime(),
-      );
-
-    return {
-      ...beach,
-      forecast,
-    };
+    return beach;
   });
 }

@@ -178,6 +178,9 @@ importers:
       '@fastify/helmet':
         specifier: ^13.1.1
         version: 13.1.1
+      '@supabase/supabase-js':
+        specifier: ^2.118.0
+        version: 2.118.0
       dotenv:
         specifier: ^18.0.0
         version: 18.0.0
