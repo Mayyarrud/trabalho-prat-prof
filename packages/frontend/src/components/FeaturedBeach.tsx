@@ -6,6 +6,8 @@ import ForecastMetric from "@/components/ForecastMetric";
 import type { Beach } from "@/models/beach";
 import { beachQueryOptions } from "@/query/beaches";
 import { formatValue, getCurrentForecast } from "@/utils/forecast";
+import SurfabilityIndicator from "@/components/SurfabilityIndicator";
+import type { SurfLevel } from "@/enums/surf-level";
 
 const dateFormat = new Intl.DateTimeFormat("pt-BR", {
   timeZone: "America/Sao_Paulo",
@@ -16,9 +18,13 @@ const dateFormat = new Intl.DateTimeFormat("pt-BR", {
   minute: "2-digit",
 });
 
-export default function FeaturedBeach({ beach }: { beach: Beach }) {
-  const { data, isPending, isFetching, error, refetch } = useQuery(
-    beachQueryOptions(beach.id),
+export default function FeaturedBeach({ beach, surfLevel, isFavourite = false }: {
+  beach: Beach;
+  surfLevel?: SurfLevel | null;
+  isFavourite?: boolean;
+}) {
+  const { data, isPending, isFetching, isPlaceholderData, error, refetch } = useQuery(
+    beachQueryOptions(beach.id, surfLevel),
   );
   const forecast = data ? getCurrentForecast(data.forecast) : undefined;
 
@@ -32,7 +38,7 @@ export default function FeaturedBeach({ beach }: { beach: Beach }) {
         />
         <div className="absolute left-4 right-4 top-5 text-white">
           <p className="text-[10px] font-semibold uppercase tracking-wide">
-            Praia em destaque
+            {isFavourite ? "Sua praia favorita" : "Praia em destaque"}
           </p>
           <h2 className="mt-1 text-lg font-semibold leading-tight">
             {beach.name}
@@ -95,14 +101,7 @@ export default function FeaturedBeach({ beach }: { beach: Beach }) {
               />
             </dl>
 
-            <dl className="mt-3 flex items-center justify-between gap-3 rounded-xl bg-[#E9E2FF] px-3 py-3">
-              <dt className="text-xs text-[#6B665C]">Surfabilidade</dt>
-              <dd className="text-sm font-semibold">
-                {forecast.surfScore === null
-                  ? "Sem avaliação"
-                  : formatValue(forecast.surfScore)}
-              </dd>
-            </dl>
+            <SurfabilityIndicator evaluation={forecast.surfability} surfLevel={surfLevel} surfScore={forecast.surfScore} isLoading={isPlaceholderData} />
           </>
         ) : (
           <p className="py-4 text-sm text-[#6B665C]">

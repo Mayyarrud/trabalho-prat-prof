@@ -1,5 +1,6 @@
 import BeachIllustration from "@/components/BeachIllustration";
 import type { Beach } from "@/models/beach";
+import FavouriteBeachButton from "@/components/FavouriteBeachButton";
 
 export default function BeachSummary({ beach }: { beach: Beach }) {
   const mapUrl = `https://www.google.com/maps?q=${beach.latitude},${beach.longitude}`;
@@ -22,6 +23,7 @@ export default function BeachSummary({ beach }: { beach: Beach }) {
         >
           Ver no mapa
         </a>
+        <FavouriteBeachButton beachId={beach.id} />
       </div>
     </section>
   );

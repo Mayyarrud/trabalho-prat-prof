@@ -6,9 +6,11 @@ import FeaturedBeach from "@/components/FeaturedBeach";
 import Header from "@/components/Header";
 import type { Beach } from "@/models/beach";
 import { searchBeachesQueryOptions } from "@/query/beaches";
+import { useMe } from "@/query/me";
 
 export default function HomePage() {
   const [selectedBeach, setSelectedBeach] = useState<Beach | null>(null);
+  const profile = useMe();
   const {
     data: beaches = [],
     isPending,
@@ -16,7 +18,8 @@ export default function HomePage() {
     error,
     refetch,
   } = useQuery(searchBeachesQueryOptions());
-  const beach = selectedBeach ?? beaches[0];
+  const favouriteBeach = beaches.find((beach) => beach.id === profile.data?.idFavouriteBeach);
+  const beach = selectedBeach ?? favouriteBeach ?? beaches[0];
 
   return (
     <main className="min-h-screen bg-[#F5F0DD] text-[#222A31]">
@@ -34,8 +37,22 @@ export default function HomePage() {
 
         <BeachSearch selectedBeachId={beach?.id} onSelect={setSelectedBeach} />
 
+        {profile.error && (
+          <p role="alert" className="mt-4 text-sm text-[#6B665C]">
+            Não foi possível carregar seu perfil e sua favorita.{" "}
+            <button type="button" onClick={() => profile.refetch()} className="underline">Tentar novamente</button>
+          </p>
+        )}
+
+        {favouriteBeach && selectedBeach && selectedBeach.id !== favouriteBeach.id && (
+          <button type="button" onClick={() => setSelectedBeach(null)}
+            className="mt-4 text-left text-sm font-medium underline underline-offset-4">
+            Voltar à favorita: {favouriteBeach.name}
+          </button>
+        )}
+
         {beach ? (
-          <FeaturedBeach beach={beach} />
+          <FeaturedBeach beach={beach} surfLevel={profile.data?.surfLevel} isFavourite={beach.id === favouriteBeach?.id} />
         ) : isPending ? (
           <p
             role="status"

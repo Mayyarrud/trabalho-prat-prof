@@ -47,7 +47,7 @@ function AppRouter({ router }: { router: ReturnType<typeof createAppRouter> }) {
     );
   }
 
-  return <RouterProvider router={router} />;
+  return <RouterProvider key={user?.id ?? "guest"} router={router} />;
 }
 
 async function startApp() {

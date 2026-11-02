@@ -1,9 +1,15 @@
 import { supabase } from "@/lib/supabase";
 
-export async function apiFetch(path: string, options: RequestInit = {}) {
+export async function apiFetch(
+  path: string,
+  options: RequestInit = {},
+) {
   const {
     data: { session },
+    error,
   } = await supabase.auth.getSession();
+
+  if (error) throw error;
 
   const headers = new Headers(options.headers);
 

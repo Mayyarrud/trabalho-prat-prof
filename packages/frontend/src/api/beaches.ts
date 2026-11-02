@@ -1,12 +1,15 @@
 import type { Beach, BeachDetail } from "@/models/beach";
+import type { SurfLevel } from "@/enums/surf-level";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function getBeach(
   id: string,
   signal?: AbortSignal,
+  surfLevel?: SurfLevel | null,
 ): Promise<BeachDetail> {
-  const response = await fetch(`${API_URL}/beaches/${encodeURIComponent(id)}`, {
+  const query = surfLevel ? `?${new URLSearchParams({ surfLevel })}` : "";
+  const response = await fetch(`${API_URL}/beaches/${encodeURIComponent(id)}${query}`, {
     signal,
   });
 

@@ -2,6 +2,8 @@ import { useState } from "react";
 
 import ForecastMetric from "@/components/ForecastMetric";
 import type { Forecast } from "@/models/forecast";
+import type { SurfLevel } from "@/enums/surf-level";
+import SurfabilityIndicator from "@/components/SurfabilityIndicator";
 import {
   formatDirection,
   formatValue,
@@ -21,8 +23,12 @@ const dateFormat = new Intl.DateTimeFormat("pt-BR", {
 
 export default function BeachForecast({
   forecasts,
+  surfLevel,
+  isUpdating = false,
 }: {
   forecasts: Forecast[];
+  surfLevel?: SurfLevel | null;
+  isUpdating?: boolean;
 }) {
   const [selectedTime, setSelectedTime] = useState("");
   const forecast =
@@ -75,16 +81,8 @@ export default function BeachForecast({
 
       <div className="mt-6">
         <h3 className="text-sm font-medium">Condições principais</h3>
+        <SurfabilityIndicator evaluation={forecast.surfability} surfLevel={surfLevel} surfScore={forecast.surfScore} isLoading={isUpdating} />
         <dl className="mt-3 grid grid-cols-2 gap-3">
-          <ForecastMetric
-            label="Surfabilidade"
-            value={
-              forecast.surfScore === null
-                ? "Sem avaliação"
-                : formatValue(forecast.surfScore)
-            }
-            className="bg-[#E9E2FF]"
-          />
           <ForecastMetric
             label="Visibilidade"
             value={formatValue(
