@@ -1,7 +1,7 @@
 import { beachesCache, forecastsCache } from "../cache/data.ts";
 import type { SurfLevel } from "../enums/surf-level.ts";
 import normalizeString from "../utils/normalize-string.ts";
-import { simulateSurfability } from "./surfability.ts";
+import { calculateSurfability } from "./surfability.ts";
 
 export function searchBeaches(search?: string) {
   if (search === undefined) return beachesCache;
@@ -15,16 +15,23 @@ export function getBeach(id: string, surfLevel?: SurfLevel) {
   if (!beach) return null;
 
   const forecast = forecastsCache
-    .filter((forecast) => forecast.idBeach === id)
-    .sort((a, b) => a.forecastTime.getTime() - b.forecastTime.getTime());
+  .filter((item) => item.idBeach === id)
+  .sort(
+    (a, b) =>
+      a.forecastTime.getTime() -
+      b.forecastTime.getTime(),
+  );
 
   return {
     ...beach,
     forecast: surfLevel
       ? forecast.map((item) => ({
-        ...item,
-        surfability: simulateSurfability(beach, item, surfLevel),
-      }))
+          ...item,
+          surfability: calculateSurfability(
+            item,
+            surfLevel,
+          ),
+        }))
       : forecast,
   };
 }
