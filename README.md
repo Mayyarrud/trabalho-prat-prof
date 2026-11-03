@@ -372,6 +372,8 @@ Para que outro desenvolvedor consiga rodar a aplicação em seu computador pesso
 ### Pré-requisitos
 - Ter o [Node.js](https://nodejs.org/) instalado na máquina.
 - Ter o [Git](https://git-scm.com/) instalado.
+- Ter o [pnpm 12.6.0](https://pnpm.io/) instalado na máquina.
+O projeto utiliza uma estrutura de monorepo com pnpm Workspaces, organizada em dois pacotes principais: packages/frontend e packages/backend.
 
 ### Passo a passo para execução
 
@@ -387,13 +389,27 @@ Para que outro desenvolvedor consiga rodar a aplicação em seu computador pesso
    Execute o comando abaixo para instalar todas as bibliotecas necessárias do projeto:
    `npm install`
 
-4. **Rodar a aplicação:**
-   Inicie o servidor de desenvolvimento com o comando:
-   `npm run dev`
+4. **Iniciar o Back-end:**
+   Abra um terminal e execute:
+   `cd packages/backend`
+    `npx pnpm@12.6.0 dev`
+   
+O servidor do back-end será iniciado em modo de desenvolvimento.
 
-5. **Acessar no navegador:**
-   O terminal exibirá um link local (geralmente `http://localhost:5173` ou `http://localhost:3000`). Basta clicar nele ou colar no navegador para ver o sistema funcionando!
+5. **Iniciar o Front-end:**
+   Abra um segundo terminal, acesse novamente a pasta raiz do projeto e execute:
+   `cd packages/frontend`
+    `npx pnpm@12.6.0 dev`
 
+   O servidor de desenvolvimento do front-end será iniciado pelo Vite.
+
+6. **Acessar no navegador:**
+  Após iniciar o front-end, acesse no navegador o endereço informado pelo Vite, normalmente:
+
+  http://localhost:5173
+
+7. **Encerrando a aplicação:**
+  Para encerrar os servidores, pressione Ctrl + C nos respectivos terminais.
 ---
    
 # 📝 Atualizações do Guia
