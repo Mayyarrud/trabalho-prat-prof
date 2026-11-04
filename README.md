@@ -367,51 +367,124 @@ Visualizar condições
 
 ## 🛠️ Como executar o projeto localmente
 
-Para que outro desenvolvedor consiga rodar a aplicação em seu computador pessoal, siga os passos abaixo:
+O projeto é um monorepo com dois pacotes: `packages/frontend` (React, Vite e Supabase Auth) e `packages/backend` (Fastify, Drizzle ORM e PostgreSQL). O frontend se comunica com a API HTTP; o backend acessa o banco diretamente. **Para executar tudo localmente, ainda é necessário um projeto Supabase e um widget Cloudflare Turnstile configurados.**
 
-### Pré-requisitos
-- Ter o [Node.js](https://nodejs.org/) instalado na máquina.
-- Ter o [Git](https://git-scm.com/) instalado.
-- Ter o [pnpm 12.6.0](https://pnpm.io/) instalado na máquina.
-O projeto utiliza uma estrutura de monorepo com pnpm Workspaces, organizada em dois pacotes principais: packages/frontend e packages/backend.
+### 1. Pré-requisitos e instalação
 
-### Passo a passo para execução
+- [Git](https://git-scm.com/).
+- [Node.js 24](https://nodejs.org/)
+- [pnpm 12.6.0](https://pnpm.io/installation)
+- Acesso a um projeto [Supabase](https://supabase.com/) com PostgreSQL e Auth e a um widget [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/).
 
-1. **Clonar o repositório:**
-   Abra o terminal e baixe o projeto executando o comando:
-   `git clone https://github.com/Mayyarrud/trabalho-prat-prof.git`
+No terminal:
 
-2. **Acessar a pasta do projeto:**
-   Navegue até o diretório do projeto:
-   `cd trabalho-prat-prof`
+```bash
+git clone https://github.com/Mayyarrud/trabalho-prat-prof.git
+cd trabalho-prat-prof
+pnpm install --frozen-lockfile
+```
 
-3. **Instalar as dependências:**
-   Execute o comando abaixo para instalar todas as bibliotecas necessárias do projeto:
-   `npm install`
+Execute os próximos comandos **a partir da raiz do repositório**, salvo indicação em contrário. Não use `npm install`: as dependências são gerenciadas pelo workspace do pnpm.
 
-4. **Iniciar o Back-end:**
-   Abra um terminal e execute:
-   `cd packages/backend`
-    `npx pnpm@12.6.0 dev`
-   
-O servidor do back-end será iniciado em modo de desenvolvimento.
+### 2. Configurar as variáveis de ambiente
 
-5. **Iniciar o Front-end:**
-   Abra um segundo terminal, acesse novamente a pasta raiz do projeto e execute:
-   `cd packages/frontend`
-    `npx pnpm@12.6.0 dev`
+Crie os dois arquivos locais a partir dos modelos versionados:
 
-   O servidor de desenvolvimento do front-end será iniciado pelo Vite.
+```bash
+cp .env.example .env
+cp packages/frontend/.env.example packages/frontend/.env.local
+```
 
-6. **Acessar no navegador:**
-  Após iniciar o front-end, acesse no navegador o endereço informado pelo Vite, normalmente:
+No arquivo `.env` da **raiz** (backend), preencha:
 
-  http://localhost:5173
+| Variável | Finalidade |
+| --- | --- |
+| `DATABASE_URL` | String de conexão com o PostgreSQL do Supabase. |
+| `SUPABASE_URL` | URL do mesmo projeto Supabase usado no frontend. |
+| `SUPABASE_PUBLISHABLE_KEY` | Chave pública/publishable do projeto Supabase, usada para validar autenticação. |
+| `CORS_ORIGIN` | Origem permitida para o frontend local (`http://localhost:5173`). |
 
-7. **Encerrando a aplicação:**
-  Para encerrar os servidores, pressione Ctrl + C nos respectivos terminais.
----
-   
+No arquivo `packages/frontend/.env.local` (Vite), preencha:
+
+| Variável | Finalidade |
+| --- | --- |
+| `VITE_API_URL` | URL da API local (`http://localhost:3000`). |
+| `VITE_SUPABASE_URL` | URL do projeto Supabase. |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Chave pública/publishable desse projeto. |
+| `VITE_TURNSTILE_SITE_KEY` | Chave pública do widget Turnstile usado no cadastro, login e recuperação de senha. |
+
+As variáveis `VITE_*` são incorporadas ao código do navegador: **não coloque nelas senhas do banco, chaves secretas ou a `service_role` do Supabase**. Os arquivos `.env` e `.env.local` são ignorados pelo Git.
+
+No painel do Supabase, habilite os métodos de autenticação desejados e inclua `http://localhost:5173/**` nas URLs de redirecionamento permitidas em **Authentication → URL Configuration** para o fluxo de confirmação de e-mail e recuperação de senha. Para testes, prefira um **widget Turnstile de desenvolvimento**, com `localhost` autorizado e sua chave secreta correspondente configurada no CAPTCHA do Supabase; não adicione `localhost` ao widget de produção. O mesmo projeto Supabase deve ser usado pelo frontend e backend.
+
+### 3. Preparar o banco de dados (primeira execução)
+
+Com o `.env` da raiz preenchido, aplique as migrações SQL já existentes no repositório:
+
+```bash
+pnpm --filter @vai-dar-onda/backend exec drizzle-kit migrate
+```
+
+O esquema `public.user` referencia `auth.users` do Supabase. **Apenas em projetos novos, sem esse gatilho configurado**, execute no **SQL Editor** do Supabase o SQL abaixo para criar o perfil automaticamente após o cadastro. Esse gatilho não está incluído nas migrações do repositório; se ele já existe, mantenha a configuração atual.
+
+```sql
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+BEGIN
+  INSERT INTO public."user" (id, role, name, surf_level)
+  VALUES (
+    NEW.id,
+    'user',
+    COALESCE(
+      NULLIF(TRIM(NEW.raw_user_meta_data ->> 'name'), ''),
+      NULLIF(SPLIT_PART(NEW.email, '@', 1), ''),
+      'Usuário'
+    ),
+    NULLIF(TRIM(NEW.raw_user_meta_data ->> 'surf_level'), '')
+  )
+  ON CONFLICT (id) DO NOTHING;
+
+  RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER on_auth_user_created
+AFTER INSERT ON auth.users
+FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+```
+
+Depois, importe as 10 praias do MVP (CETESB/IBGE) e suas previsões iniciais (Open-Meteo):
+
+```bash
+pnpm --filter @vai-dar-onda/backend populate-beaches-db
+pnpm --filter @vai-dar-onda/backend populate-forecast-db
+```
+
+Esses comandos exigem acesso à internet e ao banco. Se as praias já estiverem cadastradas, o primeiro script não as insere novamente.
+
+### 4. Iniciar a aplicação
+
+Em um terminal, execute o **backend**:
+
+```bash
+pnpm --filter @vai-dar-onda/backend dev
+```
+
+Em outro terminal, execute o **frontend**:
+
+```bash
+pnpm --filter @vai-dar-onda/frontend dev
+```
+
+- Aplicação: [http://localhost:5173](http://localhost:5173)
+- API: [http://localhost:3000](http://localhost:3000)
+
+O backend carrega o cache do banco ao iniciar e verifica se as previsões precisam ser atualizadas. Também agenda uma sincronização automática a cada 4 horas. Para encerrar os dois processos, pressione `Ctrl+C` em cada terminal.
+
 # 📝 Atualizações do Guia
 Esta documentação será atualizada conforme as funcionalidades forem implementadas, testadas e disponibilizadas na aplicação.
 
